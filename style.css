@@ -1,0 +1,128 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-image: linear-gradient(to top, hsla(0, 0%, 0%, 0.698), transparent),
+                    url("images/BG.jpg");
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px 0;
+}
+
+.container {
+    width: 100%;
+    max-width: 400px;
+    background: white;
+    padding: 20px 30px;
+    border-radius: 10px;
+    box-shadow: 5px 10px 15px #00000091;
+}
+
+.title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.title img {
+    max-width: 60px;
+    height: auto;
+    margin-bottom: 5px;
+}
+
+.title h2 {
+    margin: 0;
+    color: #333;
+    font-size: 1.3rem;
+}
+
+.form-group {
+    margin-bottom: 8px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 3px;
+    font-size: 13px;
+}
+
+input[type="text"],
+input[type="password"],
+select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    font-size: 14px;
+}
+
+.password-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.password-wrapper i {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #666;
+    font-size: 14px;
+}
+
+#strength-container {
+    height: 4px;
+    background: #eee;
+    margin-top: 4px;
+    border-radius: 3px;
+}
+
+#strength-bar {
+    height: 100%;
+    width: 0%;
+    transition: 0.4s ease;
+}
+
+#strength-text {
+    font-size: 10px;
+    font-weight: bold;
+    display: block;
+}
+
+.gender-options {
+    display: flex;
+    gap: 15px;
+    font-size: 14px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.error {
+    color: #dc3545;
+    font-size: 11px;
+    min-height: 14px
+    display: block;
+}
