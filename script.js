@@ -6,15 +6,15 @@ const toggleConfirmPassword = document.getElementById("toggleConfirmPassword");
 const strengthBar = document.getElementById("strength-bar");
 const strengthText = document.getElementById("strength-text");
 
-//PASSWORD STRENGTH METER
+// Password Strength Meter
 passwordInput.addEventListener("input", function() {
     const val = passwordInput.value;
     let strength = 0;
 
-    if (val.length >= 8) strength += 25;           // Length check
-    if (val.match(/[A-Z]/)) strength += 25;        // Uppercase check
-    if (val.match(/[0-9]/)) strength += 25;        // Number check
-    if (val.match(/[^A-Za-z0-9]/)) strength += 25; // Special char check
+    if (val.length >= 8) strength += 25;
+    if (val.match(/[A-Z]/)) strength += 25;
+    if (val.match(/[0-9]/)) strength += 25;
+    if (val.match(/[^A-Za-z0-9]/)) strength += 25;
 
     strengthBar.style.width = strength + "%";
 
@@ -40,34 +40,18 @@ passwordInput.addEventListener("input", function() {
     }
 });
 
-//SHOW/HIDE PASSWORD
-togglePassword.addEventListener("click", function() {
-    const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
-    passwordInput.setAttribute("type", type);
-    
-    // Toggle the icon class
-    this.classList.toggle("fa-eye");
-    this.classList.toggle("fa-eye-slash");
+// Show/Hide Password Toggle
+[togglePassword, toggleConfirmPassword].forEach((toggle, index) => {
+    toggle.addEventListener("click", function() {
+        const input = index === 0 ? passwordInput : confirmPasswordInput;
+        const type = input.getAttribute("type") === "password" ? "text" : "password";
+        input.setAttribute("type", type);
+        this.classList.toggle("fa-eye");
+        this.classList.toggle("fa-eye-slash");
+    });
 });
 
-//SHOW/HIDE CONFIRM PASSWORD
-toggleConfirmPassword.addEventListener("click", function() {
-    const type = confirmPasswordInput.getAttribute("type") === "password" ? "text" : "password";
-    confirmPasswordInput.setAttribute("type", type);
-    this.classList.toggle("fa-eye");
-    this.classList.toggle("fa-eye-slash");
-});
-
-//Check if passwords match
-if (confirmPasswordInput.value !== passwordInput.value) {
-    showError(confirmPasswordInput, "Passwords do not match");
-    isValid = false;
-} else if (confirmPasswordInput.value === "") {
-    showError(confirmPasswordInput, "Please confirm your password");
-    isValid = false;
-}
-
-//AUTO FORMAT NAME
+// Auto Format Name & Block Numbers (Real-time Sanitization)
 const nameInputs = [
     document.getElementById("firstName"),
     document.getElementById("middleName"),
@@ -78,9 +62,12 @@ nameInputs.forEach(input => {
     input.addEventListener("input", function() {
         let cursorSelection = this.selectionStart;
         
+        // Remove numbers and special characters immediately
+        let cleanedValue = this.value.replace(/[0-9]/g, '');
+
         // Capitalize first letter of every word
-        const formattedValue = this.value.split(' ')
-            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        const formattedValue = cleanedValue.split(' ')
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
             .join(' ');
 
         this.value = formattedValue;
@@ -88,7 +75,7 @@ nameInputs.forEach(input => {
     });
 });
 
-// --- FORM SUBMISSION & VALIDATION ---
+// Form Submission and Validation
 form.addEventListener("submit", function(e) {
     e.preventDefault();
     let isValid = true;
@@ -99,36 +86,33 @@ form.addEventListener("submit", function(e) {
     const gender = document.getElementsByName("gender");
     const terms = document.getElementById("terms");
 
-    const nameRegex = /^[A-Za-z\s]+$/;
     const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
 
-    // Clear all previous error messages
+    // Clear previous errors
     document.querySelectorAll(".error").forEach(e => e.textContent = "");
 
-    // Name Validation
-    if (!nameRegex.test(firstName.value)) {
-        showError(firstName, "Only letters allowed");
+    // Basic empty check for required names
+    if (firstName.value.trim() === "") {
+        showError(firstName, "First name is required");
         isValid = false;
     }
 
-    if (!nameRegex.test(lastName.value)) {
-        showError(lastName, "Only letters allowed");
+    if (lastName.value.trim() === "") {
+        showError(lastName, "Last name is required");
         isValid = false;
     }
 
-    // Course Validation
     if (course.value === "") {
         showError(course, "Please select a course");
         isValid = false;
     }
 
-    // Password Format Validation
     if (!passwordRegex.test(passwordInput.value)) {
         showError(passwordInput, "Requires 8+ chars, 1 uppercase, 1 number, 1 symbol");
         isValid = false;
     }
 
-    // PASSWORD MATCHING VALIDATION (Moved inside the listener)
+    // Confirm Password Matching
     if (confirmPasswordInput.value === "") {
         showError(confirmPasswordInput, "Please confirm your password");
         isValid = false;
@@ -137,7 +121,6 @@ form.addEventListener("submit", function(e) {
         isValid = false;
     }
 
-    // Gender Validation
     let genderSelected = false;
     gender.forEach(g => { if (g.checked) genderSelected = true; });
     if (!genderSelected) {
@@ -145,21 +128,21 @@ form.addEventListener("submit", function(e) {
         isValid = false;
     }
 
-    // Terms Validation
     if (!terms.checked) {
         showError(terms, "Required");
         isValid = false;
     }
 
     if (isValid) {
-        alert("Registration Successful");
+        alert("Registration Successful!");
         form.reset();
-        // Reset strength bar after success
         strengthBar.style.width = "0%";
         strengthText.textContent = "";
     }
 });
+
 function showError(input, message) {
     const formGroup = input.closest(".form-group");
-    formGroup.querySelector(".error").textContent = message;
+    const errorDisplay = formGroup.querySelector(".error");
+    if (errorDisplay) errorDisplay.textContent = message;
 }
